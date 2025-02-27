@@ -15,7 +15,7 @@ BLACK = (0, 0, 0)
 
 # Set up screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Mario Platformer")
+pygame.display.set_caption("Platformer")
 
 # Define character properties
 CHARACTER_RADIUS = 25  # Character as a circle
