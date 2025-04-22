@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="16">
+ <tileset firstgid="1" source="factory_tileset.tsx"/>
+ <tileset firstgid="417" source="all_black.tsx"/>
+ <imagelayer id="3" name="Background" offsetx="-141.333" offsety="-2.66667">
+  <image source="../../../Downloads/result_BGimage.png" width="1138" height="640"/>
+ </imagelayer>
+ <layer id="1" name="Terrain" width="30" height="20">
+  <data encoding="csv">
+417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,
+0,0,0,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,
+0,0,0,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,
+0,417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,
+417,417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,
+417,417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417
+</data>
+ </layer>
+ <objectgroup id="2" name="Objects">
+  <object id="2" name="acid_1" x="0" y="450" width="770" height="192">
+   <properties>
+    <property name="damage" type="int" value="1"/>
+    <property name="jump_mod" type="float" value="0.3"/>
+    <property name="swim_speed" type="float" value="0.5"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="3" name="tipper_1" x="256" y="416" width="64" height="14.6667">
+   <properties>
+    <property name="fall_time" type="float" value="25"/>
+    <property name="reset" type="bool" value="false"/>
+    <property name="tip_delay" type="float" value="0.3"/>
+    <property name="tip_speed" type="float" value="30"/>
+    <property name="type" value="tipping_platform"/>
+   </properties>
+  </object>
+  <object id="5" name="tipper_2" x="370.818" y="391.727" width="64" height="14.6667">
+   <properties>
+    <property name="fall_time" type="float" value="25"/>
+    <property name="reset" type="bool" value="false"/>
+    <property name="tip_delay" type="float" value="0.3"/>
+    <property name="tip_speed" type="float" value="30"/>
+    <property name="type" value="tipping_platform"/>
+   </properties>
+  </object>
+  <object id="6" name="tipper_3" x="497.818" y="423.394" width="64" height="14.6667">
+   <properties>
+    <property name="fall_time" type="float" value="25"/>
+    <property name="reset" type="bool" value="false"/>
+    <property name="tip_delay" type="float" value="0.3"/>
+    <property name="tip_speed" type="float" value="30"/>
+    <property name="type" value="tipping_platform"/>
+   </properties>
+  </object>
+  <object id="7" name="tipper_4" x="619.485" y="409.394" width="64" height="14.6667">
+   <properties>
+    <property name="fall_time" type="float" value="25"/>
+    <property name="reset" type="bool" value="false"/>
+    <property name="tip_delay" type="float" value="0.3"/>
+    <property name="tip_speed" type="float" value="30"/>
+    <property name="type" value="tipping_platform"/>
+   </properties>
+  </object>
+  <object id="9" x="0" y="32">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+   <polyline points="0,0 544,0 544,32 640,32 640,64 736,64 736,96 768,96 768,128 800,128 800,160 864,160 864,224 800,224 800,256 768,256 768,320 960,320 960,-32 0,-32 0,0"/>
+  </object>
+  <object id="10" x="0" y="640">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+   <polygon points="0,0 0,-64 32,-64 32,-96 96,-96 96,-192 160,-192 160,-96 192,-96 192,0 704,0 704,-64 736,-64 736,-96 768,-96 768,-192 960,-192 960,0 704,0"/>
+  </object>
+  <object id="11" name="player" x="128" y="416">
+   <properties>
+    <property name="type" value="player_spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="13" name="level_end" x="896" y="352" width="64" height="96">
+   <properties>
+    <property name="type" value="trigger"/>
+   </properties>
+  </object>
+  <object id="14" x="960" y="352">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+   <polyline points="0,0 0,96"/>
+  </object>
+  <object id="15" x="0" y="32">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+   <polyline points="0,0 0,544"/>
+  </object>
+ </objectgroup>
+</map>

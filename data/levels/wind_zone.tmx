@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="24">
+ <tileset firstgid="1" source="factory_tileset.tsx"/>
+ <tileset firstgid="417" source="all_black.tsx"/>
+ <imagelayer id="3" name="Background" offsetx="-37.3333" offsety="26.6667">
+  <image source="../../../Downloads/result_BGimage.png" width="1138" height="640"/>
+ </imagelayer>
+ <layer id="1" name="Terrain" width="30" height="20">
+  <data encoding="csv">
+417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,417,417,417,417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+417,417,417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+417,417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,417,417,417,417,417,417,417,417,417,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
+417,417,417,417,417,0,417,417,417,417,417,417,417,417,417,0,417,417,417,417,417,417,417,417,417,417,417,417,417,417
+</data>
+ </layer>
+ <objectgroup id="2" name="Objects">
+  <properties>
+   <property name="damage" type="int" value="10"/>
+   <property name="type" value="pit"/>
+  </properties>
+  <object id="1" name="platform_1" x="200" y="450" width="120" height="24">
+   <properties>
+    <property name="loop" type="bool" value="false"/>
+    <property name="path_id" value="platform_1_path"/>
+    <property name="speed" type="float" value="50"/>
+    <property name="type" value="moving_platform"/>
+   </properties>
+  </object>
+  <object id="3" name="platform_3" x="225" y="195" width="120" height="24">
+   <properties>
+    <property name="loop" type="bool" value="false"/>
+    <property name="path_id" value="platform_3_path"/>
+    <property name="speed" type="float" value="50"/>
+    <property name="type" value="moving_platform"/>
+   </properties>
+  </object>
+  <object id="4" name="platform_2" x="325" y="325" width="120" height="24">
+   <properties>
+    <property name="loop" type="bool" value="false"/>
+    <property name="path_id" value="platform_2_path"/>
+    <property name="speed" type="float" value="50"/>
+    <property name="type" value="moving_platform"/>
+   </properties>
+  </object>
+  <object id="7" name="platform_2_path" x="325" y="325">
+   <polyline points="0,0 -128,0.333333 -128.333,0"/>
+  </object>
+  <object id="8" name="platform_1_path" x="200" y="450.5">
+   <polyline points="0,0 159.75,-1"/>
+  </object>
+  <object id="9" name="platform_3_path" x="225" y="195">
+   <polyline points="0,0 205.25,-0.5"/>
+  </object>
+  <object id="10" name="wind_zone_1" x="195" y="160" width="290" height="480">
+   <properties>
+    <property name="jump_mod" type="float" value="1.5"/>
+    <property name="type" value="wind_zone"/>
+   </properties>
+  </object>
+  <object id="11" name="player" x="30" y="545">
+   <properties>
+    <property name="type" value="player_spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="12" name="level_end" x="900" y="130" width="62" height="63">
+   <properties>
+    <property name="type" value="trigger"/>
+   </properties>
+  </object>
+  <object id="13" x="-0.666667" y="575.333" width="161.333" height="63.3333">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+  </object>
+  <object id="14" x="513" y="193" width="448" height="448">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+  </object>
+  <object id="18" x="0" y="0">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+   <polygon points="0,0 0,448 160,448 160,128 192,128 192,96 224,96 224,64 416,64 416,32 960,32 960,0"/>
+  </object>
+  <object id="19" x="0" y="448">
+   <properties>
+    <property name="type" value="solid"/>
+   </properties>
+   <polyline points="0,0 0,128"/>
+  </object>
+  <object id="20" x="960" y="32">
+   <properties>
+    <property name="tye" value=""/>
+   </properties>
+   <polyline points="0,0 0,160"/>
+  </object>
+  <object id="23" x="160" y="640">
+   <polyline points="0,0 352,0"/>
+  </object>
+ </objectgroup>
+</map>
