@@ -63,7 +63,7 @@ class Player(pygame.sprite.Sprite):
 		#collisions
 		self.on_surface['floor'] = True if floor_rect.collidelist(collide_rects) >= 0 else False
 		self.on_surface['right'] = True if right_rect.collidelist(collide_rects) >= 0 else False
-		self.on_surface['leftt'] = True if left_rect.collidelist(collide_rects) >= 0 else False
+		self.on_surface['left'] = True if left_rect.collidelist(collide_rects) >= 0 else False
 		
 	def collision(self, axis):
 		for sprite in self.collision_sprites:
