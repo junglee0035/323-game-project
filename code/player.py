@@ -1,91 +1,51 @@
-from settings import * 
+import pygame
 
 class Player(pygame.sprite.Sprite):
-	def __init__(self, pos, groups, collision_sprites):
-		super().__init__(groups)
-		self.image = pygame.Surface((48,56))
-		self.image.fill('red')
+    def __init__(self, pos, group):
+        super().__init__(group)
+        self.image = pygame.Surface((32, 32))  # Placeholder for player sprite
+        self.image.fill('blue')  # Fill with a color for visibility
+        self.rect = self.image.get_rect(topleft=pos)
 
-		#rects
-		self.rect = self.image.get_frect(topleft = pos)
-		self.old_rect = self.rect.copy()
+        # Movement attributes
+        self.speed = 200  # Pixels per second
+        self.direction = pygame.math.Vector2(0, 0)
 
-		#movement 
-		self.direction = vector()
-		self.speed = 200
-		self.gravity = 1300
-		self.jump = False
-		self.jump_height = 900
+    def handle_input(self):
+        keys = pygame.key.get_pressed()
+        self.direction.x = 0
+        self.direction.y = 0
 
-		#collision
-		self.collision_sprites = collision_sprites
-		self.on_surface = {'floor': False, 'left': False, 'right': False}
-		
-		self.display_surface = pygame.display.get_surface()
+        if keys[pygame.K_w]:  # Move up
+            self.direction.y = -1
+        if keys[pygame.K_s]:  # Move down
+            self.direction.y = 1
+        if keys[pygame.K_a]:  # Move left
+            self.direction.x = -1
+        if keys[pygame.K_d]:  # Move right
+            self.direction.x = 1
 
+    def move(self, dt, solids):
+        # Move horizontally and check for collisions
+        self.rect.x += self.direction.x * self.speed * dt
+        for solid in solids:
+            if self.rect.colliderect(solid.rect):
+                if self.direction.x > 0:  # Moving right
+                    self.rect.right = solid.rect.left
+                elif self.direction.x < 0:  # Moving left
+                    self.rect.left = solid.rect.right
 
+        # Move vertically and check for collisions
+        self.rect.y += self.direction.y * self.speed * dt
+        for solid in solids:
+            if self.rect.colliderect(solid.rect):
+                if self.direction.y > 0:  # Moving down
+                    self.rect.bottom = solid.rect.top
+                elif self.direction.y < 0:  # Moving up
+                    self.rect.top = solid.rect.bottom
 
-	def input(self):
-		keys = pygame.key.get_pressed()
-		input_vector = vector(0,0)
-		if keys[pygame.K_RIGHT]:
-			input_vector.x += 1
-		if keys[pygame.K_LEFT]:
-			input_vector.x -= 1
-		self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
-
-		if keys[pygame.K_SPACE]:
-			self.jump = True
-
-	def move(self, dt):
-		#horizontal
-		self.rect.x += self.direction.x * self.speed * dt
-		self.collision('horizontal')
-
-		#vertical
-		self.direction.y += self.gravity / 2 * dt
-		self.rect.y += self.direction.y * dt
-		self.direction.y += self.gravity / 2 * dt
-		self.collision('vertical')
-
-		if self.jump:
-			if self.on_surface['floor']:
-				self.direction.y = -self.jump_height
-			self.jump = False
-	
-	def check_contact(self):
-		floor_rect = pygame.Rect(self.rect.bottomleft, (self.rect.width,2))
-		right_rect = pygame.Rect(self.rect.topright + vector(0,self.rect.height / 4),(2, self.rect.height / 2))
-		left_rect = pygame.Rect(self.rect.topleft + vector(-2,self.rect.height / 4), (2, self.rect.height / 2))
-
-		collide_rects = [sprite.rect for sprite in self.collision_sprites]
-
-		#collisions
-		self.on_surface['floor'] = True if floor_rect.collidelist(collide_rects) >= 0 else False
-		self.on_surface['right'] = True if right_rect.collidelist(collide_rects) >= 0 else False
-		self.on_surface['left'] = True if left_rect.collidelist(collide_rects) >= 0 else False
-		
-	def collision(self, axis):
-		for sprite in self.collision_sprites:
-			if sprite.rect.colliderect(self.rect):
-				if axis == 'horizontal':
-					#left
-					if self.direction.x > 0:  # moving right
-						self.rect.right = sprite.rect.left
-					
-					if self.direction.x < 0:  # moving left
-						self.rect.left = sprite.rect.right
-
-				elif axis == 'vertical':
-					if self.direction.y > 0:  # moving down
-						self.rect.bottom = sprite.rect.top
-						self.direction.y = 0  # stop falling
-					if self.direction.y < 0:  # moving up (e.g. jumping)
-						self.rect.top = sprite.rect.bottom
-						self.direction.y = 0  # cancel upward velocity
-
-	def update(self, dt):
-		self.old_rect = self.rect.copy()
-		self.input()
-		self.move(dt)
-		self.check_contact()
+    def update(self, dt, solids):
+        self.handle_input()
+        if self.direction.magnitude() != 0:
+            self.direction = self.direction.normalize()
+        self.move(dt, solids)

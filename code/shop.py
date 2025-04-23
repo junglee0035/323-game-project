@@ -24,6 +24,7 @@ def buy_item(player_data, item_name):
 
 
 def shop_menu(player_data):
+    print("Shop menu opened!")
     while True:
         print("\n--- SHOP ---")
         for i, (item, price) in enumerate(shop_items.items(), start=1):

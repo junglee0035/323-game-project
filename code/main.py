@@ -5,6 +5,9 @@ from os.path import join
 from options import OptionsMenu
 from shop import shop_menu
 from save_system import save_game, load_game
+import os
+os.chdir('C:/Users/shoot/OneDrive/Desktop/COMP/323-game-project-main/323-game-project-main')
+(print("Current working directory:", os.getcwd()))
 
 
 
@@ -19,6 +22,7 @@ class Game:
         self.instruction_font = pygame.font.SysFont("lucidaconsole", int(self.display_surface.get_height() * 0.035))
         self.coin_font = pygame.font.SysFont("lucidaconsole", 24)
         self.player_data = load_game()
+        self.current_stage = None  # Initialize the current stage
 
 
         #Default values
@@ -64,7 +68,6 @@ class Game:
 
         #self.tmx_maps = {0: load_pygame(join('data', 'levels', 'omni.tmx'))}
         #self.current_stage = Level(self.tmx_maps[0]) 
-
 
     
     def draw_titlescreen(self): 
@@ -128,7 +131,11 @@ class Game:
                         if selected == "START": 
                             self.select_sound.play()
                             pygame.mixer.music.stop() 
-                            return 
+
+                            tmx_data = load_pygame(join('data', 'levels', 'Spotlight.tmx'))
+                            self.current_stage = Level(tmx_data)
+                            return
+
                         elif selected == "OPTIONS": 
                             from options import OptionsMenu
                             OptionsMenu(self).run()
@@ -142,31 +149,45 @@ class Game:
     def run(self):
         self.titlescreen()
         while True:
-            dt = self.clock.tick() / 1000
+            dt = self.clock.tick(60) / 1000
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            if self.current_stage:
+                result = self.current_stage.run(dt)
+                if result == "next_stage":
+                    print("Transitioning to the next stage...")
+                    tmx_data = load_pygame(join('data', 'levels', 'NextLevel.tmx'))  # Load the next level
+                    self.current_stage = Level(tmx_data)
+
+            # Display coin count (if applicable)
+            coin_text = self.coin_font.render(f"Coins: {self.player_data['coins']}", True, (0, 0, 0))
+            self.display_surface.blit(coin_text, (20, 20))
+            pygame.display.update()
+
+    def open_shop_menu(self):
+        while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     save_game(self.player_data)
                     pygame.quit()
                     sys.exit()
-                
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_s:
-                        print("You pressed S!")  
-                        if self.shop_sound: 
-                            self.shop_sound.play()
-                            print("SHOP SOUND PLAYED!")
-                        result = shop_menu(self.player_data)
-                        print(result)
-                        save_game(self.player_data)
-
-
-
-            #self.current_stage.run(dt)
-            coin_text = self.coin_font.render(f"Coins: {self.player_data['coins']}", True, (0, 0, 0))
-            self.display_surface.blit(coin_text, (20, 20))
-            pygame.display.update()
-
     
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:  # Close the shop menu
+                        return "Shop closed"
+                    # Add any other shop menu-specific logic here
+        
+            # Call the shop menu logic
+            result = shop_menu(self.player_data)
+        
+            # Update the display (optional, if the shop menu has visuals)
+            self.display_surface.fill('black')  # Example: Clear the screen
+            pygame.display.update()
+        
+            return result     
 
 if __name__ == '__main__':
     game = Game()
