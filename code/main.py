@@ -6,7 +6,7 @@ from options import OptionsMenu
 from shop import shop_menu
 from save_system import save_game, load_game
 import os
-
+#should be working
 
 
 class Game:
@@ -21,6 +21,17 @@ class Game:
         self.coin_font = pygame.font.SysFont("lucidaconsole", 24)
         self.player_data = load_game()
         self.current_stage = None  # Initialize the current stage
+
+        self.levels = [
+            join('data', 'levels', 'Spotlight.tmx'),
+            join('data', 'levels', 'wind_zone.tmx'),
+            join('data', 'levels', 'wall.tmx'),
+            join('data', 'levels', 'bridge.tmx'),
+            join('data', 'levels', 'tipping_platforms.tmx'),
+            join('data', 'levels', 'acid_pool.tmx'),
+            join('data', 'levels', 'lava_pool.tmx')
+        ]
+        self.current_level_index = 0
 
 
         #Default values
@@ -64,19 +75,8 @@ class Game:
             print("⚠️ Shop sound failed to load.")
 
 
-        # dictionary of levels tmx files to handle transitions
-        self.tmx_maps = {
-            0: load_pygame(join('data', 'levels', 'Spotlight.tmx')),
-            1: load_pygame(join('data', 'levels', 'wind_zone.tmx')),
-			2: load_pygame(join('data', 'levels', 'wall.tmx')),
-			3: load_pygame(join('data', 'levels', 'bridge.tmx')),
-			4: load_pygame(join('data', 'levels', 'tipping_platforms.tmx')),
-			5: load_pygame(join('data', 'levels', 'acid_pool.tmx')),
-            6: load_pygame(join('data', 'levels', 'lava_pool.tmx')),
-            }
-
-        self.current_index = 0  # Track current level index for transitions
-        self.current_stage = Level(self.tmx_maps[self.current_index])
+        #self.tmx_maps = {0: load_pygame(join('data', 'levels', 'omni.tmx'))}
+        #self.current_stage = Level(self.tmx_maps[0]) 
 
     
     def draw_titlescreen(self): 
@@ -141,8 +141,8 @@ class Game:
                             self.select_sound.play()
                             pygame.mixer.music.stop() 
 
-                            self.current_index = 0  # Track current level index for transitions
-                            self.current_stage = Level(self.tmx_maps[self.current_index])   
+                            tmx_data = load_pygame(join('data', 'levels', 'Spotlight.tmx'))
+                            self.current_stage = Level(tmx_data)
                             return
 
                         elif selected == "OPTIONS": 
@@ -156,7 +156,7 @@ class Game:
             self.draw_titlescreen()
                 
     def run(self):
-	self.titlescreen()
+        self.titlescreen()
         while True:
             dt = self.clock.tick(60) / 1000
             for event in pygame.event.get():
