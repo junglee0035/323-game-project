@@ -1,5 +1,5 @@
-from settings import * 
 import pygame
+from settings import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group):
@@ -13,7 +13,8 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2(0, 0)
         input_vector = vector(0, 0)
         self.gravity = 1300
-        self.jump_force = -500
+        self.default_jump_force = -500
+        self.jump_force = self.default_jump_force
         self.jump = False
         self.jump_buffered = False
         self.on_ground = False
