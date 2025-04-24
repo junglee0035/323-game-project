@@ -99,6 +99,6 @@ class OptionsMenu:
     def update_resolution(self):
         new_res = self.resolutions[self.res_index]
         self.game.display_surface = pygame.display.set_mode(new_res)
-        self.display_surface = self.game.display_surfacef.res_index]
+        self.display_surface = self.game.display_surfacef.res_index
         self.game.display_surface = pygame.display.set_mode(new_res)
         self.display_surface = self.game.display_surface
