@@ -2,7 +2,7 @@
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="37">
  <tileset firstgid="1" source="factory_tileset.tsx"/>
  <tileset firstgid="417" source="all_black.tsx"/>
- <imagelayer id="6" name="Background" offsetx="-97.3333" offsety="-0.666667">
+ <imagelayer id="6" name="Background" parallaxx="1.2">
   <image source="../../../Downloads/result_BGimage.png" width="1138" height="640"/>
  </imagelayer>
  <layer id="1" name="Terrain" width="30" height="20">
