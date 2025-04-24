@@ -1,226 +1,183 @@
-# -*- coding: utf-8 -*-
-from settings import * 
-from level import Level
-from pytmx.util_pygame import load_pygame
-from os.path import join
-from options import OptionsMenu
-from shop import run_shop
-from save_system import save_game, load_game
 import os
+import pytmx
+from settings import *
+from os.path import join
+from sprites import Sprite, Coin
+from player import Player
+from Spotlight import Spotlight
 #should be working
 
+class Level:
+    def __init__(self, tmx_map, game_instance):
+        self.display_surface = pygame.display.get_surface() 
+        self.tmx_map = tmx_map
+        self.game_instance = game_instance 
 
-class Game:
-    def __init__(self):
-        pygame.init()	#initialize Pygame
-        self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))	# Main display surface
-        pygame.display.set_caption('Nexus Core - Prototype')	#Title for game windowed
-        self.clock = pygame.time.Clock()	#Frame rate
-        #fonts
-        self.title_font = pygame.font.SysFont("lucidaconsole", int(self.display_surface.get_height() * 0.07))
-        self.instruction_font = pygame.font.SysFont("lucidaconsole", int(self.display_surface.get_height() * 0.035))
-        self.coin_font = pygame.font.SysFont("lucidaconsole", 24)
-        self.player_data = load_game()
-        self.current_stage = None  # Initialize the current stage
+        #groups
+        self.all_sprites = pygame.sprite.Group()
+        self.solids = pygame.sprite.Group()
+        self.triggers = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
+        self.walls = []
+        self.setup(tmx_map)
 
-        self.levels = [
-            join('data', 'levels', 'Spotlight.tmx'),
-            join('data', 'levels', 'wind_zone.tmx'),
-            join('data', 'levels', 'wall.tmx'),
-            join('data', 'levels', 'bridge.tmx'),
-            join('data', 'levels', 'tipping_platforms.tmx'),
-            join('data', 'levels', 'acid_pool.tmx'),
-            join('data', 'levels', 'lava_pool.tmx')
-        ]
-        self.current_level_index = 0
-
-
-        #Default values
-        self.menu_options = ["START", "OPTIONS", "QUIT"]	#Menu options
-        self.selected_index = 0 	
-        self.music_volume = 50
-        self.sfx_volume = 50
-
-        self.flicker_timer = 0 
-        self.show_prompt = True 
-        self.start_time = None 
-
-        # Load and scale background for title screen
-        self.bg_image = pygame.image.load(join('graphics', 'ui', 'title_bg.png')).convert() 
-        self.bg_image = pygame.transform.scale(self.bg_image, (WINDOW_WIDTH, WINDOW_HEIGHT)) 
-        
-        try: 
-            self.logo = pygame.image.load(join('graphics', 'ui', 'logo.png')).convert_alpha() 
-        
-        except: 
-            self.logo = None
-
-        try: #Load menu sfx
-            self.nav_sound = pygame.mixer.Sound(join('sound', 'nav.wav'))
-            self.nav_sound.set_volume(0.4)
-        
-        except:
-            self.nav_sound = None
-        
+    def setup(self, tmx_map):
         try:
-            self.select_sound = pygame.mixer.Sound(join('sound', 'select.wav'))
-            self.select_sound.set_volume(0.7) 
-        except:
-            self.select_sound = None
-        
+            objects_layer = tmx_map.get_layer_by_name('Objects')
+            print("Objects layer found.")
+        except KeyError:
+            print("Objects layer not found.")
+            return
+
+        # Handle objects from the Objects layer
+        for obj in objects_layer:
+            print(f"Object found: {obj.name} at ({obj.x}, {obj.y})")
+            if obj.name == 'player':
+                Player((obj.x, obj.y), self.all_sprites, self.game_instance)
+            elif obj.type == 'button':
+                button_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
+                button_surface.fill((255, 255, 0, 128))
+                button = Sprite((obj.x, obj.y), button_surface, self.triggers)
+                button.prompt = obj.properties.get('prompt', None)
+                print(f"Button object added at ({obj.x}, {obj.y}) with prompt '{button.prompt}'")
+            elif obj.name == 'solid':
+                solid_surface = pygame.Surface((obj.width, obj.height))
+                solid_surface.fill((100, 100, 100))  # color for visibility
+                solid = Sprite((obj.x, obj.y), solid_surface, self.solids)
+                self.all_sprites.add(solid)
+                print(f"Solid object added at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
+            elif obj.name == 'spotlight':
+                # Get spotlight properties from the Tiled map
+                rotation_point = (obj.properties['rotation_point_x'], obj.properties['rotation_point_y'])
+                radius = obj.properties['radius']
+                speed = obj.properties['speed']
+                start_angle = obj.properties.get('start_angle', 220)  # Default to 220 degrees
+                end_angle = obj.properties.get('end_angle', 120)  # Default to 150 degrees
+                spotlight = Spotlight(rotation_point, radius, speed, self.all_sprites, start_angle, end_angle)
+                self.all_sprites.add(spotlight)
+                print(f"Spotlight added at rotation point {rotation_point} with radius {radius}, speed {speed}, start_angle {start_angle}, and end_angle {end_angle}")
+            elif obj.name == 'wall':
+                # Add wall objects to the walls list
+                wall_surface = pygame.Surface((obj.width, obj.height))
+                wall_surface.fill((150, 75, 0))  # Brown color for visibility
+                wall = Sprite((obj.x, obj.y), wall_surface, self.solids)
+                self.all_sprites.add(wall)
+                self.walls.append(wall)
+                print(f"Wall object added at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
+            elif obj.name == 'level_end':
+                # Create a trigger object for the level end
+                trigger_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
+                trigger_surface.fill((0, 255, 0, 128))  # Transparent green for debugging'
+                level_end = Sprite((obj.x, obj.y), trigger_surface, self.triggers)
+                level_end.name = 'level_end'
+                print(f"Level end trigger added at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
+            elif obj.name == 'coin':
+               coin_image = pygame.image.load(join('graphics', 'icon', 'iconCoin.png')).convert_alpha()
+               value = 5
+               Coin((obj.x, obj.y), [self.all_sprites, self.coins], coin_image, value=value)
+            elif obj.type == 'wind_zone':
+                # Create a wind zone trigger
+                trigger_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
+                trigger_surface.fill((0, 0, 255, 128))  # Semi-transparent blue for debugging
+                wind_zone = Sprite((obj.x, obj.y), trigger_surface, self.triggers)
+                wind_zone.jump_mod = obj.properties.get('jump_mod', 1.0)  # Default jump modifier is 1.0
+                print(f"Wind zone added at ({obj.x}, {obj.y}) with jump_mod {wind_zone.jump_mod}")
+            if obj.type == 'button':
+                # Create a button object
+                button_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
+                button_surface.fill((255, 255, 0, 128))  # Semi-transparent yellow for debugging
+                button = Sprite((obj.x, obj.y), button_surface, self.triggers)
+                button.activate_object_layer = obj.properties.get('activate_object_layer', None)
+                button.activate_tile_layer = obj.properties.get('activate_tile_layer', None)
+                print(f"Button added at ({obj.x}, {obj.y}) to activate object layer '{button.activate_object_layer}' and tile layer '{button.activate_tile_layer}'")
+
+    def activate_object_layer(self, layer_name):
         try:
-            self.shop_sound = pygame.mixer.Sound(join('sound', 'shop.wav')) 
-            self.shop_sound.set_volume(0.6)
-        except:
-            self.shop_sound = None
-            print("⚠️ Shop sound failed to load.")
-            
+            layer = self.tmx_map.get_layer_by_name(layer_name)
+            if hasattr(layer, 'visible'):
+                layer.visible = True
+                print(f"Object layer '{layer_name}' activated.")
+        except KeyError:
+            print(f"Object layer '{layer_name}' not found.")
+
+    def activate_tile_layer(self, layer_name):
         try:
-            self.purchase_sound = pygame.mixer.Sound(join('sound', 'purchase.wav'))
-            self.purchase_sound.set_volume(0.6)
-        except:
-            self.purchase_sound = None
-            print("⚠️ Purchase sound failed to load.")
+            layer = self.tmx_map.get_layer_by_name(layer_name)
+            if hasattr(layer, 'visible'):
+                layer.visible = True
+                print(f"Tile layer '{layer_name}' activated.")
+        except KeyError:
+            print(f"Tile layer '{layer_name}' not found.")
+
+    def run(self, dt):
+        # Update all sprites
+        for sprite in self.all_sprites:
+            if isinstance(sprite, Player):
+                sprite.update(dt, self.solids)
+            else:
+                sprite.update(dt)
+
+        # Check for collisions with triggers
+        player = next((sprite for sprite in self.all_sprites if isinstance(sprite, Player)), None)
+        if player:
+            collected = pygame.sprite.spritecollide(player, self.coins, dokill=True)
+            for coin in collected:
+               if self.game_instance.player_data.get("money_collect"):
+                   self.game_instance.player_data["coins"] += coin.value * 2
+
+               else:
+                   self.game_instance.player_data["coins"] += coin.value
+
+               if self.game_instance.coin_sound:
+                   self.game_instance.coin_sound.play()
+               print(f"🪙 Collected a coin! +{coin.value} → Total: {self.game_instance.player_data['coins']}")
 
 
-        #self.tmx_maps = {0: load_pygame(join('data', 'levels', 'domni.tmx'))}
-        #self.current_stage = Level(self.tmx_maps[0]) 
+            in_wind_zone = False
+            for trigger in self.triggers:
+                if player.rect.colliderect(trigger.rect) and hasattr(trigger, 'jump_mod'):
+                    # Increase player's jump height based on wind zone's jump_mod
+                    player.jump_force = player.default_jump_force * trigger.jump_mod
+                    in_wind_zone = True
+                    print(f"Player in wind zone: jump height increased to {player.jump_force}")
+                elif player.rect.colliderect(trigger.rect) and hasattr(trigger, 'prompt'):
+                    keys = pygame.key.get_pressed()
+                    if keys[pygame.K_x]:  # Press 'X' to activate
+                        if trigger.prompt == 'remove':
+                            for wall in self.walls:
+                                wall.image.set_alpha(0)
+                                self.solids.remove(wall)
+                                print(f"Wall at ({wall.rect.x}, {wall.rect.y}) removed")
+                        elif trigger.prompt == 'add':
+                            solid_surface = pygame.Surface((288, 32))
+                            solid_surface.fill((100, 100, 100))
+                            new_solid = Sprite((384, 416), solid_surface, [self.all_sprites, self.solids])
+                            print(f"New solid added at ({new_solid.rect.x}, {new_solid.rect.y}) with size ({new_solid.rect.width}, {new_solid.rect.height})")
+                        self.walls.clear()  # Clear the walls list
+                        print(f"Button pressed at ({trigger.rect.x}, {trigger.rect.y})")
+                elif player.rect.colliderect(trigger.rect) and hasattr(trigger, 'name') and trigger.name == 'level_end':
+                    print("Level end trigger activated!")
+                    return "next_stage"  # Signal to move to the next stage
 
-    
-    def draw_titlescreen(self): 
-        self.display_surface.blit(self.bg_image, (0, 0)) 
-        elapsed = pygame.time.get_ticks() - self.start_time 
-        fade_alpha = min(255, elapsed // 2) 	# Fade-in effect
-        
-        # Title scaling
-        if self.logo: 
-            logo_surf = pygame.transform.scale(self.logo, (700, 400))
-            logo_surf.set_alpha(fade_alpha) 
-            
-            logo_x = (WINDOW_WIDTH // 2 - logo_surf.get_width() // 2)
-            logo_y = 80  
+            # Reset jump height if the player is no longer in a wind zone
+            if not in_wind_zone:
+                player.jump_force = player.default_jump_force
+                print(f"Player left wind zone: jump height reset to {player.jump_force}")
 
-            self.display_surface.blit(logo_surf, (logo_x, logo_y))
+        # Draw tile layers
+        for layer in self.tmx_map.visible_layers:
+            if isinstance(layer, pytmx.TiledTileLayer):
+                for x, y, gid in layer:
+                    tile = self.tmx_map.get_tile_image_by_gid(gid)
+                    if tile:
+                        self.display_surface.blit(tile, (x * self.tmx_map.tilewidth, y * self.tmx_map.tileheight))
 
-        else: 
-            title_surf = self.title_font.render("NEXUS CORE", True, (255, 255, 255)) 
-            title_surf.set_alpha(fade_alpha) 
-            self.display_surface.blit(title_surf, (WINDOW_WIDTH//2 - title_surf.get_width()//2, 100)) 
-            
-        # Menu options (show after fade) 
-        if fade_alpha >= 255: 
-            for i, option in enumerate(self.menu_options): 
-                color = (255, 255, 255) if i == self.selected_index else (100, 100, 100) 
-                option_surf = self.instruction_font.render(option, True, color) 
-                y = 360 + i * 40 
-                self.display_surface.blit(option_surf, (WINDOW_WIDTH//2 - option_surf.get_width()//2, y)) 
-            pygame.display.update()
+        # Draw everything
+        self.display_surface.fill('white')  # Clear the screen
+        self.all_sprites.draw(self.display_surface)  # Draw all sprites
+        # Debug: Draw trigger areas
+        for trigger in self.triggers:
+            pygame.draw.rect(self.display_surface, (0, 255, 0), trigger.rect, 2)  # Green outline for debugging
 
-    def titlescreen(self): 	#Titlescreen management
-        try: 	# Load and play music 
-            pygame.mixer.music.load(join('sound', 'titlescreen.wav')) 
-            pygame.mixer.music.set_volume(0.5) 
-            pygame.mixer.music.play(-1) 
-        
-        except: 
-            print("Title music failed to load.") 
-        
-        self.start_time = pygame.time.get_ticks() 
-        self.selected_index = 0
-        
-        while True: 	#Controls for main menu
-            dt = self.clock.tick(60) / 1000 
-            for event in pygame.event.get(): 
-                if event.type == pygame.QUIT: 
-                    pygame.quit() 
-                    sys.exit() 
-                if event.type == pygame.KEYDOWN: 
-                    if event.key == pygame.K_DOWN: 
-                        self.selected_index = (self.selected_index + 1) % len(self.menu_options) 
-                        if self.nav_sound: self.nav_sound.play()
-                    elif event.key == pygame.K_UP: 
-                        self.selected_index = (self.selected_index - 1) % len(self.menu_options) 
-                        if self.nav_sound: self.nav_sound.play()
-                    
-                    elif event.key == pygame.K_RETURN: 
-                        if self.select_sound: self.select_sound.play()
-                        selected = self.menu_options[self.selected_index] 
-                        if selected == "START": 
-                            self.select_sound.play()
-                            pygame.mixer.music.stop() 
+        pygame.display.update()  # Update the display
 
-                            tmx_data = load_pygame(join('data', 'levels', 'Spotlight.tmx'))
-                            self.current_stage = Level(tmx_data)
-                            return
-
-                        elif selected == "OPTIONS": 
-                            from options import OptionsMenu
-                            OptionsMenu(self).run()
-                        elif selected == "QUIT": 
-                            self.select_sound.play()
-                            pygame.quit() 
-                            sys.exit()
-
-            self.draw_titlescreen()
-                
-    def run(self):
-        self.titlescreen()
-        while True:
-            dt = self.clock.tick(60) / 1000
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                    
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_s:
-                        self.open_shop_menu()
-
-            if self.current_stage:
-                result = self.current_stage.run(dt)
-                if result == "next_stage":
-                    print("Transitioning to the next stage...")
-                    self.current_level_index += 1
-                    if self.current_level_index < len(self.levels):
-                        tmx_data = load_pygame(self.levels[self.current_level_index])  # Load the next level
-                        self.current_stage = Level(tmx_data)
-                    else:
-                        print("All levels completed!")
-                        pygame.quit()
-                        sys.exit()
-
-            # Display coin count (if applicable)
-            coin_icon = pygame.image.load(join('graphics', 'icon', 'iconCoin.png')).convert_alpha()
-            coin_icon = pygame.transform.scale(coin_icon, (32, 32))
-            self.display_surface.blit(coin_icon, (15, 15))
-            
-            coin_text = self.coin_font.render(str(self.player_data['coins']), True, (255, 222, 0))
-            self.display_surface.blit(coin_text, (55, 20))
-
-   def open_shop_menu(self):
-        result, self.player_data["coins"] = run_shop(player_coins=self.player_data["coins"])
-        if result.get("money_collect"):
-            print("🪙 Money collect activated.")
-            self.player_data["has_money_collect"] = True
-            if self.purchase_sound:
-                self.purchase_sound.play()
-        if result.get("higher_jump"):
-            print("🦘 Higher jump activated.")
-            self.player_data["higher_jump"] = True
-            if self.purchase_sound:
-                self.purchase_sound.play()
-        if result.get("skip_level"):
-            print("⏭️ Skipping to next level...")
-            if self.purchase_sound:
-                self.purchase_sound.play()
-            self.load_next_level()
-
-        save_game(self.player_data)   
-
-if __name__ == '__main__':
-    game = Game()
-    game.run()
-
-if __name__ == '__main__':
-    game = Game()
-    game.run()
