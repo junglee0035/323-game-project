@@ -3,7 +3,7 @@ from level import Level
 from pytmx.util_pygame import load_pygame
 from os.path import join
 from options import OptionsMenu
-from shop import shop_menu
+from shop import run_shop
 from save_system import save_game, load_game
 import os
 #should be working
@@ -73,6 +73,13 @@ class Game:
         except:
             self.shop_sound = None
             print("⚠️ Shop sound failed to load.")
+            
+        try:
+            self.purchase_sound = pygame.mixer.Sound(join('sound', 'purchase.wav'))
+            self.purchase_sound.set_volume(0.6)
+        except:
+            self.purchase_sound = None
+            print("⚠️ Purchase sound failed to load.")
 
 
         #self.tmx_maps = {0: load_pygame(join('data', 'levels', 'domni.tmx'))}
@@ -163,6 +170,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                    
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_s:
+                        self.open_shop_menu()
 
             if self.current_stage:
                 result = self.current_stage.run(dt)
@@ -178,31 +189,32 @@ class Game:
                         sys.exit()
 
             # Display coin count (if applicable)
-            coin_text = self.coin_font.render(f"Coins: {self.player_data['coins']}", True, (0, 0, 0))
-            self.display_surface.blit(coin_text, (20, 20))
-            pygame.display.update()
+            coin_icon = pygame.image.load(join('graphics', 'icon', 'iconCoin.png')).convert_alpha()
+            coin_icon = pygame.transform.scale(coin_icon, (32, 32))
+            self.display_surface.blit(coin_icon, (15, 15))
+            
+            coin_text = self.coin_font.render(str(self.player_data['coins']), True, (255, 222, 0))
+            self.display_surface.blit(coin_text, (55, 20))
 
-    def open_shop_menu(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    save_game(self.player_data)
-                    pygame.quit()
-                    sys.exit()
-    
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:  # Close the shop menu
-                        return "Shop closed"
-                   
-        
-            # Call the shop menu logic
-            result = shop_menu(self.player_data)
-        
-            # Update the display 
-            self.display_surface.fill('black')  
-            pygame.display.update()
-        
-            return result     
+   def open_shop_menu(self):
+        result, self.player_data["coins"] = run_shop(player_coins=self.player_data["coins"])
+        if result.get("money_collect"):
+            print("🪙 Money collect activated.")
+            self.player_data["has_money_collect"] = True
+            if self.purchase_sound:
+                self.purchase_sound.play()
+        if result.get("higher_jump"):
+            print("🦘 Higher jump activated.")
+            self.player_data["higher_jump"] = True
+            if self.purchase_sound:
+                self.purchase_sound.play()
+        if result.get("skip_level"):
+            print("⏭️ Skipping to next level...")
+            if self.purchase_sound:
+                self.purchase_sound.play()
+            self.load_next_level()
+
+        save_game(self.player_data)   
 
 if __name__ == '__main__':
     game = Game()
