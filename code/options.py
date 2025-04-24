@@ -1,6 +1,7 @@
 from settings import WINDOW_WIDTH, WINDOW_HEIGHT
 import pygame
 import sys
+#should be working
 
 class OptionsMenu:
     def __init__(self, game):
@@ -97,5 +98,7 @@ class OptionsMenu:
     
     def update_resolution(self):
         new_res = self.resolutions[self.res_index]
+        self.game.display_surface = pygame.display.set_mode(new_res)
+        self.display_surface = self.game.display_surfacef.res_index]
         self.game.display_surface = pygame.display.set_mode(new_res)
         self.display_surface = self.game.display_surface
