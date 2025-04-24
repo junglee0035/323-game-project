@@ -10,6 +10,7 @@ class Player(pygame.sprite.Sprite):
         # Movement attributes
         self.speed = 200  # Pixels per second
         self.direction = pygame.math.Vector2(0, 0)
+        input_vector = vector(0, 0)
         self.gravity = 1300
         self.jump_force = -500
         self.jump = False
@@ -19,24 +20,19 @@ class Player(pygame.sprite.Sprite):
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
-        self.direction.x = 0
-        self.direction.y = 0
+        input_vector = vector(0,0)
 
-        #if keys[pygame.K_w]:  # Move up
-            #self.direction.y = -1
-        #if keys[pygame.K_s]:  # Move down
-            #self.direction.y = 1
-        if keys[pygame.K_a]:  # Move left
-            self.direction.x = -1
-        if keys[pygame.K_d]:  # Move right
-            self.direction.x = 1
-
+        if keys[pygame.K_d]:
+            input_vector.x += 1
+        if keys[pygame.K_a]:
+            input_vector.x -= 1
+        
         if input_vector.length_squared() > 0:
             input_vector = input_vector.normalize()
 
         self.direction.x = input_vector.x
-        
-        if keys[pygame.K_SPACE] and self.on_ground:
+
+        if keys[pygame.K_SPACE]:
             if not self.jump_buffered and self.on_ground:
                 self.jump = True
                 self.jump_buffered = True
