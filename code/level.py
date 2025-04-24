@@ -8,9 +8,10 @@ from Spotlight import Spotlight
 #should be working
 
 class Level:
-    def __init__(self, tmx_map):
+    def __init__(self, tmx_map, game_instance):
         self.display_surface = pygame.display.get_surface() 
         self.tmx_map = tmx_map
+        self.game_instance = game_instance 
 
         #groups
         self.all_sprites = pygame.sprite.Group()
@@ -120,14 +121,17 @@ class Level:
         player = next((sprite for sprite in self.all_sprites if isinstance(sprite, Player)), None)
         if player:
             collected = pygame.sprite.spritecollide(player, self.coins, dokill=True)
-           for coin in collected:
+            for coin in collected:
                if self.game_instance.player_data.get("money_collect"):
-                   self.player_data["coins"] += coin.value * 2
+                   self.game_instance.player_data["coins"] += coin.value * 2
+
                else:
-                   self.player_data["coins"] += coin.value
+                   self.game_instance.player_data["coins"] += coin.value
+
                if self.game_instance.coin_sound:
                    self.game_instance.coin_sound.play()
-               print(f"🪙 Collected a coin! +{coin.value} → Total: {self.player_data['coins']}")
+               print(f"🪙 Collected a coin! +{coin.value} → Total: {self.game_instance.player_data['coins']}")
+
 
             in_wind_zone = False
             for trigger in self.triggers:
@@ -176,4 +180,5 @@ class Level:
             pygame.draw.rect(self.display_surface, (0, 255, 0), trigger.rect, 2)  # Green outline for debugging
 
         pygame.display.update()  # Update the display
+
 
