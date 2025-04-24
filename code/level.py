@@ -1,7 +1,7 @@
 import os
 import pytmx
 from settings import *
-from sprites import Sprite
+from sprites import Sprite, Coin
 from player import Player
 from Spotlight import Spotlight
 #should be working
@@ -15,6 +15,7 @@ class Level:
         self.all_sprites = pygame.sprite.Group()
         self.solids = pygame.sprite.Group()
         self.triggers = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
         self.walls = []
         self.setup(tmx_map)
 
@@ -30,7 +31,7 @@ class Level:
         for obj in objects_layer:
             print(f"Object found: {obj.name} at ({obj.x}, {obj.y})")
             if obj.name == 'player':
-                Player((obj.x, obj.y), self.all_sprites)
+                Player((obj.x, obj.y), self.all_sprites, self.game_instance)
             elif obj.type == 'button':
                 button_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
                 button_surface.fill((255, 255, 0, 128))
@@ -68,6 +69,10 @@ class Level:
                 level_end = Sprite((obj.x, obj.y), trigger_surface, self.triggers)
                 level_end.name = 'level_end'
                 print(f"Level end trigger added at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
+            elif obj.name == 'coin':
+               coin_image = pygame.image.load(join('graphics', 'icon', 'iconCoin.png')).convert_alpha()
+               value = 5
+               Coin((obj.x, obj.y), [self.all_sprites, self.coins], coin_image, value=value)
             elif obj.type == 'wind_zone':
                 # Create a wind zone trigger
                 trigger_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
@@ -113,6 +118,16 @@ class Level:
         # Check for collisions with triggers
         player = next((sprite for sprite in self.all_sprites if isinstance(sprite, Player)), None)
         if player:
+            collected = pygame.sprite.spritecollide(player, self.coins, dokill=True)
+           for coin in collected:
+               if self.game_instance.player_data.get("money_collect"):
+                   self.player_data["coins"] += coin.value * 2
+               else:
+                   self.player_data["coins"] += coin.value
+               if self.game_instance.coin_sound:
+                   self.game_instance.coin_sound.play()
+               print(f"🪙 Collected a coin! +{coin.value} → Total: {self.player_data['coins']}")
+
             in_wind_zone = False
             for trigger in self.triggers:
                 if player.rect.colliderect(trigger.rect) and hasattr(trigger, 'jump_mod'):
