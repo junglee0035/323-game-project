@@ -64,8 +64,19 @@ class Game:
             print("⚠️ Shop sound failed to load.")
 
 
-        #self.tmx_maps = {0: load_pygame(join('data', 'levels', 'omni.tmx'))}
-        #self.current_stage = Level(self.tmx_maps[0]) 
+        # dictionary of levels tmx files to handle transitions
+        self.tmx_maps = {
+            0: load_pygame(join('data', 'levels', 'Spotlight.tmx')),
+            1: load_pygame(join('data', 'levels', 'wind_zone.tmx')),
+			2: load_pygame(join('data', 'levels', 'wall.tmx')),
+			3: load_pygame(join('data', 'levels', 'bridge.tmx')),
+			4: load_pygame(join('data', 'levels', 'tipping_platforms.tmx')),
+			5: load_pygame(join('data', 'levels', 'acid_pool.tmx')),
+            6: load_pygame(join('data', 'levels', 'lava_pool.tmx')),
+            }
+
+        self.current_index = 0  # Track current level index for transitions
+        self.current_stage = Level(self.tmx_maps[self.current_index])
 
     
     def draw_titlescreen(self): 
@@ -130,8 +141,8 @@ class Game:
                             self.select_sound.play()
                             pygame.mixer.music.stop() 
 
-                            tmx_data = load_pygame(join('data', 'levels', 'Spotlight.tmx'))
-                            self.current_stage = Level(tmx_data)
+                            self.current_index = 0  # Track current level index for transitions
+                            self.current_stage = Level(self.tmx_maps[self.current_index])   
                             return
 
                         elif selected == "OPTIONS": 
@@ -152,13 +163,19 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                elif event.type == pygame.USEREVENT:
+                    if event.dict.get('custom_type') == 'next_stage':
+                        self.load_next_level()
 
             if self.current_stage:
                 result = self.current_stage.run(dt)
                 if result == "next_stage":
                     print("Transitioning to the next stage...")
-                    tmx_data = load_pygame(join('data', 'levels', 'NextLevel.tmx'))  # Load the next level
-                    self.current_stage = Level(tmx_data)
+                     self.load_next_level()
+
+    def load_next_level(self):
+        self.current_index = (self.current_index + 1) % len(self.tmx_maps)
+        self.current_stage = Level(self.tmx_maps[self.current_index])
 
             # Display coin count (if applicable)
             coin_text = self.coin_font.render(f"Coins: {self.player_data['coins']}", True, (0, 0, 0))
