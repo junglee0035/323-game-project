@@ -1,86 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="37">
- <tileset firstgid="1" source="factory_tileset.tsx"/>
- <tileset firstgid="417" source="all_black.tsx"/>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="46">
+ <tileset firstgid="1" source="../tilesets/all_black.tsx"/>
  <imagelayer id="6" name="Background" parallaxx="1.2">
-  <image source="../../../Downloads/result_BGimage.png" width="1138" height="640"/>
+  <image source="../../graphics/result_BGimage.png" width="1138" height="640"/>
  </imagelayer>
  <layer id="1" name="Terrain" width="30" height="20">
   <data encoding="csv">
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,
-417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417,417
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
  <objectgroup id="3" name="Objects">
-  <object id="16" name="Spotlight" x="448" y="192">
-   <properties>
-    <property name="color" value="#ff0000"/>
-    <property name="damage" type="int" value="1"/>
-    <property name="origin" type="object" value="17"/>
-    <property name="rotation_angle" type="float" value="90"/>
-    <property name="rotation_speed" type="float" value="45"/>
-    <property name="start_angle" type="float" value="60"/>
-    <property name="type" value="rotating_spotlight"/>
-   </properties>
-   <polygon points="0,0 -31.3333,234.667 32,234.667"/>
-  </object>
-  <object id="17" name="Rotation Point" x="447.333" y="190.667">
-   <properties>
-    <property name="anchor_id" value="anchor_1"/>
-   </properties>
+  <object id="26" name="player" type="player_spawn" x="65" y="385">
    <point/>
   </object>
-  <object id="26" name="player" x="65" y="385">
+  <object id="33" name="solid" type="solid" x="0" y="448" width="960" height="192"/>
+  <object id="37" name="solid" type="solid" x="0" y="0" width="960" height="192"/>
+  <object id="39" name="level_end" type="trigger" x="928" y="192" width="32" height="256"/>
+  <object id="41" name="solid" type="solid" x="0" y="192" width="32" height="256"/>
+  <object id="44" name="spotlight" type="spotlight" x="448" y="192" width="32" height="224">
    <properties>
-    <property name="type" value="player_spawn"/>
+    <property name="radius" type="float" value="250"/>
+    <property name="rotation_point_x" type="float" value="448"/>
+    <property name="rotation_point_y" type="float" value="192"/>
+    <property name="speed" type="float" value="15"/>
    </properties>
-   <point/>
-  </object>
-  <object id="28" name="level_end" x="895" y="385" width="63" height="63">
-   <properties>
-    <property name="type" value="trigger"/>
-   </properties>
-  </object>
-  <object id="31" x="0" y="192">
-   <properties>
-    <property name="type" value="solid"/>
-   </properties>
-   <polygon points="0,0 960,0 960,-192 0,-192"/>
-  </object>
-  <object id="33" x="0" y="448" width="960" height="192">
-   <properties>
-    <property name="type" value="solid"/>
-   </properties>
-  </object>
-  <object id="35" x="0" y="192">
-   <properties>
-    <property name="type" value="solid"/>
-   </properties>
-   <polyline points="0,0 0,256"/>
-  </object>
-  <object id="36" x="960" y="192">
-   <properties>
-    <property name="type" value="solid"/>
-   </properties>
-   <polyline points="0,0 0,256"/>
   </object>
  </objectgroup>
 </map>
+
