@@ -30,20 +30,45 @@
  </layer>
  <objectgroup id="3" name="Objects">
   <object id="26" name="player" type="player_spawn" x="65" y="385">
-   <point/>
+    <point/>
   </object>
   <object id="33" name="solid" type="solid" x="0" y="448" width="960" height="192"/>
   <object id="37" name="solid" type="solid" x="0" y="0" width="960" height="192"/>
   <object id="39" name="level_end" type="trigger" x="928" y="192" width="32" height="256"/>
   <object id="41" name="solid" type="solid" x="0" y="192" width="32" height="256"/>
   <object id="44" name="spotlight" type="spotlight" x="448" y="192" width="32" height="224">
-   <properties>
-    <property name="radius" type="float" value="250"/>
-    <property name="rotation_point_x" type="float" value="448"/>
-    <property name="rotation_point_y" type="float" value="192"/>
-    <property name="speed" type="float" value="15"/>
-   </properties>
+    <properties>
+      <property name="radius" type="float" value="250"/>
+      <property name="rotation_point_x" type="float" value="448"/>
+      <property name="rotation_point_y" type="float" value="192"/>
+      <property name="speed" type="float" value="15"/>
+    </properties>
   </object>
- </objectgroup>
+
+  <!-- Coins spaced out horizontally -->
+  <object id="45" name="coin" type="coin" x="160" y="416" width="32" height="32">
+    <properties><property name="value" type="int" value="1"/></properties>
+  </object>
+  <object id="46" name="coin" type="coin" x="256" y="416" width="32" height="32">
+    <properties><property name="value" type="int" value="1"/></properties>
+  </object>
+  <object id="47" name="coin" type="coin" x="352" y="416" width="32" height="32">
+    <properties><property name="value" type="int" value="1"/></properties>
+  </object>
+  <object id="48" name="coin" type="coin" x="448" y="416" width="32" height="32">
+    <properties><property name="value" type="int" value="1"/></properties>
+  </object>
+  <object id="49" name="coin" type="coin" x="544" y="416" width="32" height="32">
+    <properties><property name="value" type="int" value="1"/></properties>
+  </object>
+
+  <!-- Elevated coins for jumping -->
+  <object id="50" name="coin" type="coin" x="640" y="384" width="32" height="32">
+    <properties><property name="value" type="int" value="1"/></properties>
+  </object>
+  <object id="51" name="coin" type="coin" x="736" y="352" width="32" height="32">
+    <properties><property name="value" type="int" value="1"/></properties>
+  </object>
+</objectgroup>
 </map>
 

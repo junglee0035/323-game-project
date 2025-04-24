@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="36">
  <tileset firstgid="1" source="../tilesets/all_black.tsx"/>
- <tileset firstgid="721" source="../../../../323-game-project-main/323-game-project-main/data/tilesets/all_black.tsx"/>
  <imagelayer id="3" name="Background" parallaxx="1.15">
   <image source="../../graphics/result_BGimage.png" width="1138" height="640"/>
  </imagelayer>
@@ -54,5 +53,24 @@
    </properties>
   </object>
   <object id="34" name="level_end" type="trigger" x="928" y="32" width="32" height="160"/>
+  <object id="36" name="coin" type="coin" x="240" y="416" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="37" name="coin" type="coin" x="300" y="288" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="38" name="coin" type="coin" x="352" y="224" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="39" name="coin" type="coin" x="480" y="128" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="40" name="coin" type="coin" x="160" y="480" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
  </objectgroup>
 </map>

@@ -1,18 +1,25 @@
 import os
 import pytmx
 from settings import *
-from sprites import Sprite
+from sprites import Sprite, Coin  
 from player import Player
 from Spotlight import Spotlight
+from os.path import join
 
 class Level:
-    def __init__(self, tmx_map):
-        self.display_surface = pygame.display.get_surface() 
+    def __init__(self, tmx_map, game_instance, player_data):
+        self.display_surface = pygame.display.get_surface()
+        self.game_instance = game_instance
 
-        #groups
+        # Store reference to player_data so we can update coins
+        self.player_data = player_data
+
+        # Groups
         self.all_sprites = pygame.sprite.Group()
         self.solids = pygame.sprite.Group()
         self.triggers = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
+
         self.setup(tmx_map)
 
     def setup(self, tmx_map):
@@ -23,33 +30,34 @@ class Level:
             print("Objects layer not found.")
             return
 
-        # Handle objects from the Objects layer
         for obj in objects_layer:
-            print(f"Object found: {obj.name} at ({obj.x}, {obj.y})")
             if obj.name == 'player':
-                Player((obj.x, obj.y), self.all_sprites)
+                Player((obj.x, obj.y), self.all_sprites, self.game_instance)
+
             elif obj.name == 'solid':
                 solid_surface = pygame.Surface((obj.width, obj.height))
-                solid_surface.fill((100, 100, 100))  # color for visibility
+                solid_surface.fill((100, 100, 100))
                 solid = Sprite((obj.x, obj.y), solid_surface, self.solids)
                 self.all_sprites.add(solid)
-                print(f"Solid object added at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
+
             elif obj.name == 'spotlight':
-                # Get spotlight properties from the Tiled map
                 rotation_point = (obj.properties['rotation_point_x'], obj.properties['rotation_point_y'])
                 radius = obj.properties['radius']
                 speed = obj.properties['speed']
-                start_angle = obj.properties.get('start_angle', 220)  # Default to 220 degrees
-                end_angle = obj.properties.get('end_angle', 120)  # Default to 150 degrees
+                start_angle = obj.properties.get('start_angle', 220)
+                end_angle = obj.properties.get('end_angle', 120)
                 spotlight = Spotlight(rotation_point, radius, speed, self.all_sprites, start_angle, end_angle)
                 self.all_sprites.add(spotlight)
-                print(f"Spotlight added at rotation point {rotation_point} with radius {radius}, speed {speed}, start_angle {start_angle}, and end_angle {end_angle}")
+
             elif obj.name == 'level_end':
-                # Create a trigger object for the level end
                 trigger_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
-                trigger_surface.fill((0, 255, 0, 128))  # Transparent green for debugging
+                trigger_surface.fill((0, 255, 0, 128))
                 trigger = Sprite((obj.x, obj.y), trigger_surface, self.triggers)
-                print(f"Level end trigger added at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
+
+            elif obj.name == 'coin':
+                coin_image = pygame.image.load(join('graphics', 'icon', 'iconCoin.png')).convert_alpha()
+                value = 5
+                Coin((obj.x, obj.y), [self.all_sprites, self.coins], coin_image, value=value)
 
     def run(self, dt):
         # Update all sprites
@@ -59,20 +67,33 @@ class Level:
             else:
                 sprite.update(dt)
 
-        # Check for collisions with triggers
+        # Get player instance
         player = next((sprite for sprite in self.all_sprites if isinstance(sprite, Player)), None)
+
+        # Check coin collection
         if player:
+            collected = pygame.sprite.spritecollide(player, self.coins, dokill=True)
+            for coin in collected:
+                if self.game_instance.player_data.get("money_collect"):
+                    self.player_data["coins"] += coin.value * 2
+                else:
+                    self.player_data["coins"] += coin.value
+                if self.game_instance.coin_sound:
+                    self.game_instance.coin_sound.play()
+                print(f"🪙 Collected a coin! +{coin.value} → Total: {self.player_data['coins']}")
+
+            # Check for level end trigger
             for trigger in self.triggers:
                 if player.rect.colliderect(trigger.rect):
-                    if trigger in self.triggers:
-                        print("Level end trigger activated!")
-                        return "next_stage"  # Signal to move to the next stage
+                    print("Level end trigger activated!")
+                    return "next_stage"
 
         # Draw everything
-        self.display_surface.fill('white')  # Clear the screen
-        self.all_sprites.draw(self.display_surface)  # Draw all sprites
+        self.display_surface.fill('white')
+        self.all_sprites.draw(self.display_surface)
 
-        # Debug: Draw trigger areas
+        # Draw trigger outlines for debugging
         for trigger in self.triggers:
-            pygame.draw.rect(self.display_surface, (0, 255, 0), trigger.rect, 2)  # Green outline for debugging
+            pygame.draw.rect(self.display_surface, (0, 255, 0), trigger.rect, 2)
 
+        return None
