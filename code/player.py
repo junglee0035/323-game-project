@@ -10,26 +10,38 @@ class Player(pygame.sprite.Sprite):
         # Movement attributes
         self.speed = 200  # Pixels per second
         self.direction = pygame.math.Vector2(0, 0)
-        self.gravity = 1200
+        self.gravity = 1300
         self.jump_force = -500
+        self.jump = False
+        self.jump_buffered = False
         self.on_ground = False
+        
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
         self.direction.x = 0
         self.direction.y = 0
 
-        if keys[pygame.K_w]:  # Move up
-            self.direction.y = -1
-        if keys[pygame.K_s]:  # Move down
-            self.direction.y = 1
+        #if keys[pygame.K_w]:  # Move up
+            #self.direction.y = -1
+        #if keys[pygame.K_s]:  # Move down
+            #self.direction.y = 1
         if keys[pygame.K_a]:  # Move left
             self.direction.x = -1
         if keys[pygame.K_d]:  # Move right
             self.direction.x = 1
+
+        if input_vector.length_squared() > 0:
+            input_vector = input_vector.normalize()
+
+        self.direction.x = input_vector.x
+        
         if keys[pygame.K_SPACE] and self.on_ground:
-            self.direction.y = self.jump_force
-            self.on_ground = False
+            if not self.jump_buffered and self.on_ground:
+                self.jump = True
+                self.jump_buffered = True
+            else:
+                self.jump_buffered = False
     
     def apply_gravity(self, dt):
         self.direction.y += self.gravity * dt
@@ -61,5 +73,11 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt, solids):
         self.handle_input()
+
+        # prevents double jumping
+        if self.jump and self.on_ground:
+            self.direction.y = self.jump_force
+            self.jump = False
+            
         self.apply_gravity(dt)
         self.move(dt, solids)
