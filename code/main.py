@@ -75,7 +75,7 @@ class Game:
             print("⚠️ Shop sound failed to load.")
 
 
-        #self.tmx_maps = {0: load_pygame(join('data', 'levels', 'omni.tmx'))}
+        #self.tmx_maps = {0: load_pygame(join('data', 'levels', 'domni.tmx'))}
         #self.current_stage = Level(self.tmx_maps[0]) 
 
     
@@ -203,6 +203,10 @@ class Game:
             pygame.display.update()
         
             return result     
+
+if __name__ == '__main__':
+    game = Game()
+    game.run()
 
 if __name__ == '__main__':
     game = Game()
