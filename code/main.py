@@ -6,8 +6,6 @@ from options import OptionsMenu
 from shop import shop_menu
 from save_system import save_game, load_game
 import os
-os.chdir('C:/Users/shoot/OneDrive/Desktop/COMP/323-game-project-main/323-game-project-main')
-(print("Current working directory:", os.getcwd()))
 
 
 
