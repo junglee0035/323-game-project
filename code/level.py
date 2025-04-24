@@ -1,6 +1,7 @@
 import os
 import pytmx
 from settings import *
+from os.path import join
 from sprites import Sprite, Coin
 from player import Player
 from Spotlight import Spotlight
