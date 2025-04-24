@@ -89,5 +89,24 @@
   <object id="34" name="solid" type="solid" x="800" y="256" width="160" height="32"/>
   <object id="35" name="solid" type="solid" x="768" y="288" width="192" height="64"/>
   <object id="36" name="level_end" type="trigger" x="928" y="352" width="32" height="96"/>
+  <object id="37" name="coin" type="coin" x="160" y="384" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="38" name="coin" type="coin" x="256" y="384" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="39" name="coin" type="coin" x="384" y="360" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="40" name="coin" type="coin" x="512" y="392" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
+
+<object id="41" name="coin" type="coin" x="640" y="368" width="32" height="32">
+  <properties><property name="value" type="int" value="1"/></properties>
+</object>
  </objectgroup>
 </map>
