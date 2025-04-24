@@ -2,7 +2,7 @@ import pygame
 from settings import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group):
+    def __init__(self, pos, group, game_instance):
         super().__init__(group)
         self.image = pygame.Surface((32, 32))  # Placeholder for player sprite
         self.image.fill('blue')  # Fill with a color for visibility
@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2(0, 0)
         input_vector = vector(0, 0)
         self.gravity = 1300
+        self.game = game_instance
         self.default_jump_force = -500
         self.jump_force = self.default_jump_force
         self.jump = False
