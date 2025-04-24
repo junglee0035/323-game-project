@@ -13,7 +13,7 @@ def load_game():
             return json.load(f)
     else:
         return {
-            "coins": 200,
+            "coins": 0,
             "inventory": [],
             "max_energy": 100
         }
