@@ -193,13 +193,13 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:  # Close the shop menu
                         return "Shop closed"
-                    # Add any other shop menu-specific logic here
+                   
         
             # Call the shop menu logic
             result = shop_menu(self.player_data)
         
-            # Update the display (optional, if the shop menu has visuals)
-            self.display_surface.fill('black')  # Example: Clear the screen
+            # Update the display 
+            self.display_surface.fill('black')  
             pygame.display.update()
         
             return result     
