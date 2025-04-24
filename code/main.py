@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from settings import * 
 from level import Level
 from pytmx.util_pygame import load_pygame
