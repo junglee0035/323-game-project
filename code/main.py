@@ -156,26 +156,26 @@ class Game:
             self.draw_titlescreen()
                 
     def run(self):
-        self.titlescreen()
+	self.titlescreen()
         while True:
             dt = self.clock.tick(60) / 1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                elif event.type == pygame.USEREVENT:
-                    if event.dict.get('custom_type') == 'next_stage':
-                        self.load_next_level()
 
             if self.current_stage:
                 result = self.current_stage.run(dt)
                 if result == "next_stage":
                     print("Transitioning to the next stage...")
-                     self.load_next_level()
-
-    def load_next_level(self):
-        self.current_index = (self.current_index + 1) % len(self.tmx_maps)
-        self.current_stage = Level(self.tmx_maps[self.current_index])
+                    self.current_level_index += 1
+                    if self.current_level_index < len(self.levels):
+                        tmx_data = load_pygame(self.levels[self.current_level_index])  # Load the next level
+                        self.current_stage = Level(tmx_data)
+                    else:
+                        print("All levels completed!")
+                        pygame.quit()
+                        sys.exit()
 
             # Display coin count (if applicable)
             coin_text = self.coin_font.render(f"Coins: {self.player_data['coins']}", True, (0, 0, 0))
