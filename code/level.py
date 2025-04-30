@@ -42,7 +42,7 @@ class Level:
                 print(f"Button object added at ({obj.x}, {obj.y}) with prompt '{button.prompt}'")
             elif obj.name == 'solid':
                 solid_surface = pygame.Surface((obj.width, obj.height))
-                solid_surface.fill((100, 100, 100))  # color for visibility
+                solid_surface.fill((10, 0, 0))  # color for visibility
                 solid = Sprite((obj.x, obj.y), solid_surface, self.solids)
                 self.all_sprites.add(solid)
                 print(f"Solid object added at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
@@ -78,7 +78,7 @@ class Level:
             elif obj.type == 'wind_zone':
                 # Create a wind zone trigger
                 trigger_surface = pygame.Surface((obj.width, obj.height), pygame.SRCALPHA)
-                trigger_surface.fill((0, 0, 255, 128))  # Semi-transparent blue for debugging
+                trigger_surface.fill((0, 255, 200, 128))  # Semi-transparent blue for debugging
                 wind_zone = Sprite((obj.x, obj.y), trigger_surface, self.triggers)
                 wind_zone.jump_mod = obj.properties.get('jump_mod', 1.0)  # Default jump modifier is 1.0
                 print(f"Wind zone added at ({obj.x}, {obj.y}) with jump_mod {wind_zone.jump_mod}")
@@ -177,7 +177,10 @@ class Level:
         self.all_sprites.draw(self.display_surface)  # Draw all sprites
         # Debug: Draw trigger areas
         for trigger in self.triggers:
-            pygame.draw.rect(self.display_surface, (0, 255, 0), trigger.rect, 2)  # Green outline for debugging
+            if hasattr(trigger, 'prompt'):
+                pygame.draw.rect(self.display_surface, (255, 0, 0), trigger.rect, 2)
+            if hasattr(trigger, 'jump_mod'):
+                pygame.draw.rect(self.display_surface, (0, 255, 0), trigger.rect, 2)  # Green outline for debugging
 
         pygame.display.update()  # Update the display
 
