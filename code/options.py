@@ -102,3 +102,4 @@ class OptionsMenu:
         self.display_surface = self.game.display_surfacef.res_index
         self.game.display_surface = pygame.display.set_mode(new_res)
         self.display_surface = self.game.display_surface
+
