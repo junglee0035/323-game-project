@@ -14,3 +14,4 @@ class SoundEffectManager:
         sound = pygame.mixer.Sound(path)
         sound.set_volume(0.8)  # 默认音量
         sound.play()
+
