@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from settings import * 
 from level import Level
 from pytmx.util_pygame import load_pygame
@@ -26,8 +25,8 @@ class Game:
         self.levels = [
             join('data', 'levels', 'Spotlight.tmx'),
             join('data', 'levels', 'wind_zone.tmx'),
-            join('data', 'levels', 'wall.tmx'),
             join('data', 'levels', 'bridge.tmx'),
+            join('data', 'levels', 'wall.tmx'),
             join('data', 'levels', 'tipping_platforms.tmx'),
             join('data', 'levels', 'acid_pool.tmx'),
             join('data', 'levels', 'lava_pool.tmx')
