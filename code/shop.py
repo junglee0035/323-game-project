@@ -2,7 +2,7 @@ import pygame
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from graphics.components.background_animator import BackgroundAnimator
+from graphics.components.backround_animator import BackgroundAnimator
 from graphics.components.head_bar import HeadBar  # ✅ 引入 HeadBar
 from soundEffectManager import SoundEffectManager  # ✅ 导入新类
 
@@ -156,3 +156,4 @@ def run_shop(player_coins=0, on_return=None):
         pygame.display.flip()
 
     return shop_effects, player_coins
+
